@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator · #5021ff & white</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #f0f4fa 0%, #d9e2ef 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        /* main card – exactly as described, soft shadows */
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 2.5rem;
+            box-shadow: 
+                0 25px 40px -12px rgba(0, 20, 40, 0.35),
+                inset 0 1px 2px rgba(255, 255, 255, 0.7);
+            width: min(100%, 680px);
+            padding: 2.2rem 2.5rem;
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: all 0.2s ease;
+        }
+
+        /* heading – pure css, no js */
+        .title {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: #1a2639;
+            margin-bottom: 0.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .title span {
+            background: linear-gradient(135deg, #5021ff, #7c5aff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+
+        /* subtle underline */
+        .title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, #5021ff, transparent);
+            margin-left: 0.75rem;
+        }
+
+        /* input row – mm/dd/yyyy + button */
+        .input-group {
+            margin: 2rem 0 2.5rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .date-field {
+            flex: 2 1 250px;
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 60px;
+            padding: 0.1rem 0.1rem 0.1rem 1.8rem;
+            box-shadow: 0 8px 18px -8px rgba(80, 33, 255, 0.2), inset 0 1px 3px #ffffff;
+            border: 1px solid rgba(80, 33, 255, 0.2);
+        }
+
+        .date-field input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 1.25rem;
+            font-weight: 500;
+            padding: 0.9rem 0.5rem 0.9rem 0;
+            color: #162b40;
+            outline: none;
+        }
+
+        .date-field input::placeholder {
+            color: #8a9bb5;
+            font-weight: 400;
+            font-size: 1.1rem;
+            letter-spacing: 0.3px;
+        }
+
+        /* the "mm/dd/yyyy" hint inside the field – visible as placeholder */
+        /* we also put a small calendar icon hint (pure css) */
+        .date-field::before {
+            content: "📅";
+            font-size: 1.3rem;
+            margin-right: 0.5rem;
+            opacity: 0.7;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.05));
+        }
+
+        /* calculate button – now using #5021ff with white text */
+        .calc-btn {
+            flex: 0 0 auto;
+            background: #5021ff;
+            border: none;
+            border-radius: 60px;
+            padding: 0.9rem 2.4rem;
+            font-size: 1.35rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: white;
+            box-shadow: 0 12px 18px -10px #5021ff, 0 3px 0 0 #3a0fcc;
+            cursor: pointer;
+            transition: 0.1s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            white-space: nowrap;
+        }
+
+        .calc-btn:hover {
+            background: #6035ff;
+            transform: translateY(-2px);
+            box-shadow: 0 18px 22px -12px #5021ff, 0 3px 0 0 #3a0fcc;
+        }
+
+        .calc-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 6px 12px -6px #5021ff;
+        }
+
+        /* result box – exactly "You are 28 years, 6 months and 9 days old." */
+        .result-panel {
+            background: #ffffffc4;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 3rem;
+            padding: 1.5rem 2rem;
+            margin-top: 1.2rem;
+            border: 1px solid rgba(80, 33, 255, 0.2);
+            box-shadow: inset 0 1px 6px rgba(255,255,255,0.8), 0 12px 28px -16px #5021ff;
+        }
+
+        .age-text {
+            font-size: 1.8rem;
+            font-weight: 550;
+            line-height: 1.4;
+            color: #0e2233;
+            word-break: break-word;
+        }
+
+        .age-text .highlight {
+            font-weight: 700;
+            color: #5021ff;
+            background: linear-gradient(145deg, #f0ebff, transparent);
+            padding: 0.1rem 0.4rem;
+            margin: 0 0.1rem;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        /* example static numbers – they are just demo placeholders */
+        .static-demo {
+            margin-top: 0.8rem;
+            font-size: 1rem;
+            color: #5021ff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-top: 1px dashed #5021ff40;
+            padding-top: 1rem;
+        }
+
+        .static-demo span {
+            background: #f0ebff;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #5021ff;
+        }
+
+        /* responsiveness */
+        @media (max-width: 500px) {
+            .card { padding: 1.8rem; }
+            .title { font-size: 1.9rem; }
+            .input-group { flex-direction: column; align-items: stretch; }
+            .date-field { padding-left: 1.2rem; }
+            .calc-btn { text-align: center; padding: 0.9rem 1.5rem; }
+            .age-text { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <!-- Title: exactly "JavaScript Age Calculator" but design shows first part muted -->
+        <div class="title">
+            <span>JavaScript</span> Age Calculator
+        </div>
+
+        <!-- Input row: mm/dd/yyyy  +  Calculate button (no js) -->
+        <div class="input-group">
+            <div class="date-field">
+                <!-- input with placeholder matches the image exactly -->
+                <input type="date" id="birthdateInput" placeholder="mm/dd/yyyy" value="03/15/1995" 
+                       aria-label="birth date mm/dd/yyyy">
+                <!-- no additional js, just a plain field -->
+            </div>
+            <!-- "Calculate" button — pure style, no onclick handler -->
+            <button class="calc-btn" id="calculateBtn">Calculate</button>
+        </div>
+
+        <!-- result section – static example reflects the image description:
+             "You are 28 years, 6 months and 9 days old." with a subtle modern twist -->
+        <div class="result-panel">
+            <div class="age-text">
+                You are <span class="highlight">28 years</span>, <span class="highlight">6 months</span> and <span class="highlight">9 days</span> old.
+            </div>
+            <!-- small static decoration: shows current base example (no js dynamic) -->
+            <div class="static-demo">
+                <span id="birthdate-box">📆 based on </span>
+                <span>✨ today's static preview</span>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/customParseFormat.js"></script>
+    dayjs.extend(window.dayjs_plugin_customParseFormat);
+    <script>
+        let userInput = document.getElementById("birthdateInput");
+        let calculateBtn = document.getElementById("calculateBtn");
+        let birthDateOutput = document.getElementById("birthdate-box");
+
+
+        calculateBtn.addEventListener("click",()=>{
+            if(userInput.value == ""){
+                alert("please enter your birthdate");
+            } else {
+                let userBirthDate = userInput.value;
+                const bd = new Date(userBirthDate);
+                const currDate = new Date();
+                dateDiff(bd,currDate);
+                birthDateOutput.innerHTML += userBirthDate;
+            }
+
+        })
+
+        function dateDiff(d1,d2) {
+            const year = d2.getFullYear() - d1.getFullYear()
+            const month = d2.getMonth() - d1.getMonth()
+            const day = d2.getDate() - d1.getDate()
+            console.log(`year : ${year} month : ${month} days  : ${day}`)
+        }
+
+        
+    </script>
+
+    <!-- absolutely zero javascript: even the example value is static.
+         the button does nothing by itself — exactly as requested. -->
+</body>
+</html>

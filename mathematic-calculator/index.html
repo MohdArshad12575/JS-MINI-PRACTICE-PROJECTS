@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>simple calculator · layout</title>
+  <style>
+    /* minimal reset – only what matters */
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 12px;
+    }
+
+    /* one container – no unnecessary classes */
+    .calculator {
+      width: 340px;
+      background: #1e1e2f;        /* dark background – buttons pop */
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* button grid – exactly 4 columns, simple gap */
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 0;           /* display will sit below with its own margin */
+    }
+
+    /* buttons – flat, clean, no extra frills */
+    .buttons button {
+      background: #2d2d44;
+      border: none;
+      border-radius: 16px;
+      padding: 18px 6px;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: white;
+      box-shadow: 0 6px 0 #0f0f1a;
+      transition: all 0.05s ease;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    /* tiny pressed effect (just for feel, no js) */
+    .buttons button:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #0f0f1a;
+    }
+
+    /* display panel – matches the lonely "0" at the bottom of your text */
+    .display {
+      background: #2a2a3b;
+      border-radius: 18px;
+      padding: 20px 18px;
+      margin-top: 20px;           /* puts it below the buttons */
+      text-align: right;
+      font-size: 2.8rem;
+      font-weight: 500;
+      color: #f3f4f6;
+      box-shadow: inset 0 4px 8px rgba(0,0,0,0.6);
+      letter-spacing: 2px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    /* very subtle differentiation for operator keys – still simple */
+    .buttons button:nth-child(4n+4) {
+      background: #3b4a5c;        /* operators: /, ., -, +, =  (slightly muted blue) */
+    }
+
+    /* AC and DEL get a slight tint (optional, keeps it clean) */
+    .buttons button:first-child {
+      background: #5f3e4a;        /* AC – soft wine */
+    }
+    .buttons button:nth-child(2) {
+      background: #4f3e5c;        /* DEL – purple hint */
+    }
+
+    /* 00 and 0 look same as digits – no extra class */
+    /* but we keep equal sign with operator colour (already 4th of row5) */
+    /* two dots (row2 col4 and row5 col3) will both get operator colour because of nth-child(4n+4) */
+    /* that’s fine – keeps it symmetric */
+
+    /* minor adjustment for the % sign – keep consistent */
+    .buttons button:nth-child(3) {
+      background: #3a4a5a;        /* % gets subtle variation, still fits */
+    }
+
+    /* make sure "00" text is clearly visible */
+  </style>
+</head>
+<body>
+<div class="calculator">
+
+  <!-- BUTTONS – exactly as your ASCII rows: top to bottom -->
+  <div class="buttons">
+    <!-- row 1: AC, DEL, %, / -->
+    <button>AC</button>
+    <button>DEL</button>
+    <button>%</button>
+    <button>/</button>
+
+    <!-- row 2: 7, 8, 9, .  (yes, dot here) -->
+    <button>7</button>
+    <button>8</button>
+    <button>9</button>
+    <button>.</button>
+
+    <!-- row 3: 4, 5, 6, - -->
+    <button>4</button>
+    <button>5</button>
+    <button>6</button>
+    <button>-</button>
+
+    <!-- row 4: 1, 2, 3, + -->
+    <button>1</button>
+    <button>2</button>
+    <button>3</button>
+    <button>+</button>
+
+    <!-- row 5: 00, 0, ., =  (second dot) -->
+    <button>00</button>
+    <button>0</button>
+    <button>.</button>
+    <button>=</button>
+  </div>
+
+  <!-- DISPLAY – the lonely "0" from the last line, placed below buttons exactly as text order -->
+  <div class="display">0</div>
+
+</div>
+</body>
+</html>
