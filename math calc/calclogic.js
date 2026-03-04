@@ -7,7 +7,7 @@ btn.forEach( (b) => {
     b.addEventListener("click", (e) => {
         let trackBtn = e.target.innerHTML
         if(trackBtn == "="){
-            displayOutput.innerHTML = eval(expression)+" times ily babe"
+            displayOutput.innerHTML = eval(expression)
             displayOutput.style.fontSize = "1.2rem";
 
         } else if(trackBtn == "AC") {
